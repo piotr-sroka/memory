@@ -35,7 +35,11 @@ body,
   background-color: #272727;
   transition: background-color 0.2s ease-in-out;
   border-radius: 6px;
-  &:hover {
+  &:hover:not([disabled]) {
     background-color: #363636;
+  }
+  &[disabled] {
+    opacity: 0.2;
+    cursor: not-allowed;
   }
 }

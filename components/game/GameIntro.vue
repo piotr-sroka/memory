@@ -10,6 +10,7 @@
         @input="onGameSeedInput"
       />
       <button
+        :disabled="!gameSeed"
         type="button"
         class="btn text-white font-bold"
         @click="startGame(false)"

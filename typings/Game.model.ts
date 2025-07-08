@@ -17,6 +17,8 @@ export interface ImageI {
   name: string;
   description: string;
   image: string;
+  selected?: boolean;
+  solved?: boolean;
 }
 export interface GameI {
   gameLevel: GameLevel;
@@ -24,6 +26,10 @@ export interface GameI {
   gameStarted: boolean;
   images: StateInterface<ImageI[]>;
   imagesForGame: ImageI[];
+  moves: number;
+  selectedImages: ImageI[];
+  time: number;
+  timer: number | NodeJS.Timeout | null;
 }
 
 export const gameLevelToSizeMap: Record<GameLevel, SizeOfGame> = {

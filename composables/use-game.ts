@@ -3,7 +3,7 @@ import type { FetchError } from 'ofetch';
 import { fetchImagesList } from '@services/images.service';
 
 import { GameLevel, gameLevelToSizeMap } from '@typings/Game.model';
-import type { GameI } from '@typings/Game.model';
+import type { GameI, ImageI } from '@typings/Game.model';
 
 import { shuffle } from '@utils/helpers/random-seed';
 
@@ -16,11 +16,15 @@ const state = reactive<GameI>({
     error: null,
     pending: false
   },
-  imagesForGame: []
+  imagesForGame: [],
+  moves: 0,
+  selectedImages: [],
+  time: 0,
+  timer: null
 });
 
 export function useGame() {
-  const { gameLevel, gameSeed, gameStarted, images, imagesForGame } = toRefs(state);
+  const { gameLevel, gameSeed, gameStarted, images, imagesForGame, moves, selectedImages, time, timer } = toRefs(state);
 
   async function fetchImages() {
     images.value.pending = true;
@@ -50,9 +54,22 @@ export function useGame() {
       const numberOfImages = cols * rows;
       const { seed, shuffled } = shuffle(images.value.data, gameSeed.value, gameLevel.value);
       const selectedImages = [...shuffled.slice(0, numberOfImages / 2)];
-      imagesForGame.value = shuffle([...selectedImages, ...selectedImages], gameSeed.value, gameLevel.value).shuffled;
+      imagesForGame.value = shuffle(
+        [
+          ...selectedImages,
+          ...selectedImages.map((img) => {
+            return {
+              ...img,
+              id: `${img.id}----copy`
+            };
+          })
+        ],
+        gameSeed.value,
+        gameLevel.value
+      ).shuffled;
       gameSeed.value = seed;
       gameStarted.value = true;
+      startTimer();
     }
   }
 
@@ -60,6 +77,7 @@ export function useGame() {
     gameLevel.value = GameLevel.EASY;
     gameSeed.value = null;
     gameStarted.value = false;
+    stopTimer();
   }
 
   function trySetGameLevel() {
@@ -73,6 +91,50 @@ export function useGame() {
         return false;
       }
     }
+    return true;
+  }
+
+  function selectImage(image: ImageI) {
+    moves.value++;
+    const imageExistInSelected = selectedImages.value.find((img) => img.id === image.id);
+    if (imageExistInSelected) {
+      selectedImages.value.splice(selectedImages.value.indexOf(imageExistInSelected), 1);
+      imageExistInSelected.selected = false;
+    } else {
+      image.selected = true;
+      selectedImages.value.push(image);
+    }
+
+    if (selectedImages.value.length === 2) {
+      if (selectedImages.value[0].id.replace('----copy', '') === selectedImages.value[1].id.replace('----copy', '')) {
+        selectedImages.value.forEach((img) => (img.solved = true));
+      }
+      setTimeout(() => {
+        selectedImages.value.forEach((img) => (img.selected = false));
+        selectedImages.value = [];
+      }, 500);
+    }
+
+    checkScore();
+  }
+
+  function checkScore() {
+    if (imagesForGame.value.every((img) => img.solved)) {
+      stopTimer();
+      setTimeout(() => {
+        return alert('gratulacje!');
+      }, 1000);
+    }
+  }
+
+  function startTimer() {
+    timer.value = setInterval(() => {
+      time.value++;
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (timer.value) clearInterval(timer.value);
   }
 
   return {
@@ -81,7 +143,11 @@ export function useGame() {
     gameStarted,
     images,
     imagesForGame,
+    moves,
+    selectedImages,
+    time,
     fetchImages,
+    selectImage,
     startGame,
     resetGame,
     trySetGameLevel

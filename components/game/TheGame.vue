@@ -4,7 +4,8 @@
       <div
         v-for="image in imagesForGame"
         :key="image.id"
-        class="item"
+        :class="['item', { selected: image.selected }, { solved: image.solved }]"
+        @click="selectImage(image)"
       >
         <img
           :src="image.image"
@@ -18,7 +19,7 @@
 <script setup lang="ts">
 import { gameLevelToSizeMap } from '@typings/Game.model';
 
-const { imagesForGame, gameLevel } = useGame();
+const { imagesForGame, gameLevel, selectImage } = useGame();
 
 const numberOfColumns = gameLevelToSizeMap[gameLevel.value].split('x')[0];
 </script>
@@ -48,9 +49,30 @@ const numberOfColumns = gameLevelToSizeMap[gameLevel.value].split('x')[0];
   align-items: center;
   padding: 12px;
   border: 1px solid #fff;
+  position: relative;
   &__image {
     max-width: 100%;
     max-height: 100%;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #7c2d12;
+  }
+
+  &.selected,
+  &.solved {
+    &::before {
+      background-color: transparent;
+    }
+  }
+
+  &.solved {
+    border-color: #7c2d12;
+    opacity: 0.4;
   }
 }
 </style>

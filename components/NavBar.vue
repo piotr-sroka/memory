@@ -8,20 +8,33 @@
       Nowa gra
     </button>
     <div
-      v-if="gameStarted"
+      v-if="gameSeed"
       class="stats flex justify-end gap-6"
     >
       <div class="stats__seed">#{{ gameSeed }}</div>
-      <div class="stats__moves flex gap-3">Ruchy:<span class="stats__moves-count inline-block">0</span></div>
-      <div class="stats__time flex gap-3">Czas gry:<span class="stats__time-count inline-block">00:00</span></div>
+      <div class="stats__moves flex gap-3">
+        Ruchy:<span class="stats__moves-count inline-block">{{ moves }}</span>
+      </div>
+      <div class="stats__time flex gap-3">
+        Czas gry:<span class="stats__time-count inline-block">{{ gameTime }}</span>
+      </div>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
-const { gameSeed, resetGame } = useGame();
+const { gameSeed, moves, time, resetGame } = useGame();
 
-const gameStarted = computed(() => gameSeed.value);
+const gameTime = computed(() => {
+  const h = Math.floor(time.value / 3600)
+    .toString()
+    .padStart(2, '0');
+  const m = Math.floor((time.value % 3600) / 60)
+    .toString()
+    .padStart(2, '0');
+  const s = (time.value % 60).toString().padStart(2, '0');
+  return `${h}:${m}:${s}`;
+});
 </script>
 
 <style lang="scss" scoped>
