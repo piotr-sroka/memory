@@ -194,7 +194,6 @@ function draw() {
 
     if (!image.selected && !image.solved) {
       context.fillStyle = '#180802';
-      context.globalAlpha = 0.5;
       context.fillRect(x, y, w, h);
       context.globalAlpha = 1;
     }
