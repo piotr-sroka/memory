@@ -6,9 +6,9 @@
     <canvas
       ref="canvasRef"
       class="absolute top-0 left-0 w-full h-full"
-      @click="handleClick"
-      @mousemove="handleMouseMove"
-      @mouseleave="resetParallax"
+      @pointerdown="handleClick"
+      @pointermove="handleMouseMove"
+      @pointerleave="resetParallax"
     />
   </div>
 </template>
@@ -65,8 +65,8 @@ function setupCanvas() {
   const wrapper = wrapperRef.value!;
   const dpr = window.devicePixelRatio || 1;
 
-  const width = wrapper.offsetWidth;
-  const height = wrapper.offsetHeight;
+  const width = wrapper.clientWidth;
+  const height = wrapper.clientHeight;
 
   canvas.width = width * dpr;
   canvas.height = height * dpr;
@@ -201,8 +201,9 @@ function draw() {
 }
 
 function getIndexFromPosition(x: number, y: number): number | null {
-  const col = Math.floor(x / cellWidth);
-  const row = Math.floor(y / cellHeight);
+  const scale = window.devicePixelRatio || 1;
+  const col = Math.floor(x / scale / cellWidth);
+  const row = Math.floor(y / scale / cellHeight);
   const index = row * cols + col;
   return index >= 0 && index < imagesForGame.value.length ? index : null;
 }
@@ -269,6 +270,10 @@ watch(gameLevel, () => {
 </script>
 
 <style lang="scss" scoped>
+canvas,
+.canvas-wrapper {
+  box-sizing: border-box;
+}
 canvas {
   display: block;
 }
