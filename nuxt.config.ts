@@ -13,5 +13,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   css: ['~/assets/scss/main.scss', '~/assets/css/tailwind.css'],
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss']
+  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss'],
+  plugins: ['~/plugins/toastify.client.ts']
 });

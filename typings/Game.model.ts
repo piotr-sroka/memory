@@ -1,4 +1,4 @@
-import type { StateInterface } from './Response';
+import type { StateInterface } from '@typings/Response';
 
 export enum GameLevel {
   EASY = 'easy',
@@ -17,10 +17,14 @@ export interface ImageI {
   name: string;
   description: string;
   image: string;
+  rarity: {
+    color: string;
+  };
   selected?: boolean;
   solved?: boolean;
 }
 export interface GameI {
+  gameEnded: boolean;
   gameLevel: GameLevel;
   gameSeed: string | null;
   gameStarted: boolean;
