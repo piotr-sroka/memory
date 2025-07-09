@@ -3,6 +3,9 @@ import { fileURLToPath } from 'node:url';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
+  app: {
+    baseURL: '/memory/'
+  },
   alias: {
     '@components': fileURLToPath(new URL('./components', import.meta.url)),
     '@composables': fileURLToPath(new URL('./composables', import.meta.url)),
