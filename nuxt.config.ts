@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 export default defineNuxtConfig({
   ssr: false,
   app: {
-    baseURL: '/memory/'
+    baseURL: process.env.NODE_ENV === 'production' ? '/memory/' : '/'
   },
   alias: {
     '@components': fileURLToPath(new URL('./components', import.meta.url)),
