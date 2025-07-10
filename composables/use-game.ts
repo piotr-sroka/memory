@@ -20,6 +20,7 @@ const state = reactive<GameI>({
   },
   imagesForGame: [],
   moves: 0,
+  scoresVisible: false,
   selectedImages: [],
   time: 0,
   timer: null
@@ -52,6 +53,7 @@ export function useGame() {
     images,
     imagesForGame,
     moves,
+    scoresVisible,
     selectedImages,
     time,
     timer
@@ -111,6 +113,7 @@ export function useGame() {
         gameSeed.value,
         gameLevel.value
       );
+      gameSeed.value = seed;
       const selectedImages = [...shuffled.slice(0, numberOfImages / 2)];
       imagesForGame.value = shuffle(
         [
@@ -132,7 +135,6 @@ export function useGame() {
           }
         });
       }
-      gameSeed.value = seed;
       gameStarted.value = true;
       if (!imagesForGame.value.every((img) => img.solved)) {
         startTimer();
@@ -265,6 +267,10 @@ export function useGame() {
     gameEnded.value = false;
   }
 
+  function showScores() {
+    scoresVisible.value = true;
+  }
+
   return {
     gameEnded,
     gameLevel,
@@ -273,11 +279,13 @@ export function useGame() {
     images,
     imagesForGame,
     moves,
+    scoresVisible,
     selectedImages,
     time,
     fetchImages,
     saveScore,
     selectImage,
+    showScores,
     startGame,
     resetGame,
     trySetGameLevel

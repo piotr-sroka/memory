@@ -1,12 +1,20 @@
 <template>
   <nav class="nav py-5 w-full flex justify-between items-center">
-    <button
-      type="button"
-      class="new-game-btn btn text-white font-bold"
-      @click="resetGame()"
-    >
-      Nowa gra
-    </button>
+    <div class="flex gap-5 items-center">
+      <button
+        type="button"
+        class="new-game-btn btn text-white font-bold"
+        @click="resetGame()"
+      >
+        Nowa gra
+      </button>
+      <span title="Tablica wyników">
+        <TrophyIcon
+          class="cursor-pointer size-8"
+          @click="showScores()"
+        />
+      </span>
+    </div>
     <div
       v-if="gameSeed"
       class="stats flex justify-end gap-6"
@@ -33,20 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { DocumentDuplicateIcon } from '@heroicons/vue/24/solid';
+import { DocumentDuplicateIcon, TrophyIcon } from '@heroicons/vue/24/solid';
 import { useClipboard } from '@vueuse/core';
-const { gameSeed, moves, time, resetGame } = useGame();
+import { formatTime } from '@utils/helpers/format-time';
 
-const gameTime = computed(() => {
-  const h = Math.floor(time.value / 3600)
-    .toString()
-    .padStart(2, '0');
-  const m = Math.floor((time.value % 3600) / 60)
-    .toString()
-    .padStart(2, '0');
-  const s = (time.value % 60).toString().padStart(2, '0');
-  return `${h}:${m}:${s}`;
-});
+const { gameSeed, moves, time, resetGame, showScores } = useGame();
+
+const gameTime = computed(() => formatTime(time.value));
 
 function copySeed() {
   if (gameSeed.value) {

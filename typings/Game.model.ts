@@ -31,6 +31,7 @@ export interface GameI {
   images: StateInterface<ImageI[]>;
   imagesForGame: ImageI[];
   moves: number;
+  scoresVisible: boolean;
   selectedImages: ImageI[];
   time: number;
   timer: number | NodeJS.Timeout | null;

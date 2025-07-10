@@ -2,6 +2,7 @@
   <section class="game w-full h-full flex justify-center items-center">
     <GameIntro v-if="!gameStarted" />
     <TheGame v-else />
+
     <TheDialog v-model="gameEnded">
       <template #header>
         <p class="text-2xl">Gratulacje!</p>
@@ -24,14 +25,27 @@
         </button>
       </template>
     </TheDialog>
+
+    <TheDialog
+      v-model="scoresVisible"
+      max-width="800px"
+    >
+      <template #header>
+        <p class="text-2xl">Lista wyników</p>
+      </template>
+      <template #default>
+        <ScoresList />
+      </template>
+    </TheDialog>
   </section>
 </template>
 
 <script setup lang="ts">
 import GameIntro from '@components/game/GameIntro.vue';
+import ScoresList from '@components/ScoresList.vue';
 import TheGame from '@components/game/TheGame.vue';
 
-const { gameEnded, gameStarted, saveScore } = useGame();
+const { gameEnded, gameStarted, scoresVisible, saveScore } = useGame();
 
 const userName = ref();
 </script>

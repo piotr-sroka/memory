@@ -5,6 +5,7 @@
   >
     <div
       class="dialog__content flex flex-col gap-4 w-full rounded-md px-4 py-6 bg-slate-200 text-zinc-800"
+      :style="{ maxWidth: maxWidth }"
     >
       <div class="dialog__header flex justify-between items-center">
         <slot name="header" />
@@ -30,6 +31,10 @@ defineProps({
   closeAvailable: {
     type: Boolean,
     default: true
+  },
+  maxWidth: {
+    type: String,
+    default: '400px'
   }
 });
 
@@ -45,7 +50,6 @@ const model = defineModel<boolean>();
   background-color: #272727e8;
 
   &__content {
-    max-width: 400px;
     border: 1px solid #f8f8f8;
   }
 }
