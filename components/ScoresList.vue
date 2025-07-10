@@ -41,14 +41,23 @@ const scores: Ref<
   width: 100%;
   max-width: 600px;
   border-collapse: collapse;
-  margin: 2rem auto;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
+  margin: auto;
   color: #272727;
+  table-layout: fixed;
 }
 
 .scores thead {
   background-color: #f5f5f5;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.scores tbody {
+  display: block;
+  max-height: 400px;
+  overflow-y: auto;
+  width: 100%;
 }
 
 .scores th,
@@ -56,6 +65,13 @@ const scores: Ref<
   padding: 12px 16px;
   text-align: center;
   border-bottom: 1px solid #e0e0e0;
+  box-sizing: border-box;
+}
+
+.scores tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
 .scores tr:hover {
@@ -64,6 +80,21 @@ const scores: Ref<
 
 .scores th {
   font-weight: bold;
-  color: #555;
+  color: #272727;
+}
+
+.scores th:nth-child(2),
+.scores td:nth-child(2) {
+  width: 20%;
+}
+
+.scores th:nth-child(3),
+.scores td:nth-child(3) {
+  width: 25%;
+}
+
+.scores th:nth-child(4),
+.scores td:nth-child(4) {
+  width: 30%;
 }
 </style>
